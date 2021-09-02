@@ -42,7 +42,7 @@ cv = function(dataset,percentage){
   ####0 is the training 
   data_id['MODELING_GROUP'] = 0  
   #####1 is for validation 
-  percentage = 0.9 
+  percentage = 0.9 # So this is the proportion of data set that is used in the in-sample data for training.
   data_id[data_id$wookie > percentage,'MODELING_GROUP'] = 1
   data_out = merge(dataset,data_id,by='gvkey')
   return(data_out)
@@ -53,6 +53,7 @@ cv = function(dataset,percentage){
 
 ####Rough missing value imputation??? replace all the missing values with 0
 
+# assign the missing value for median instead of 0. Better to use their methods. 
 miss_with0= function(x){
   x[is.na(x)]=0
   return(x)
