@@ -1,11 +1,11 @@
 
-"""
-This version: August 20, 2021
 
-Purpose: Replication of the Earnings-part-2
+#' This version: August 20, 2021
+#' 
+#' Purpose: Replication of the Earnings-part-2
+#' 
+#' @author: Xia Zou
 
-@author: Xia Zou
-"""  
 
 
 
@@ -13,8 +13,12 @@ Purpose: Replication of the Earnings-part-2
 rm(list = ls()) 
 library(haven)
 library(randomForest)
+library(parallel)
+library(foreach)
+library(data.table)
 ####path of data
-pathdta = '/Users/xiazou/Desktop/Tinbergen_Study/block5/Forecasting_LTG/Replication/OneDrive-2021-08-19'
+# pathdta = '/Users/xiazou/Desktop/Tinbergen_Study/block5/Forecasting_LTG/Replication/OneDrive-2021-08-19'
+pathdta = 'D:/Dropbox/Research Projects/Forecasting LTG/Earnings/Earnings_data'
 setwd(pathdta)
 # dataset_at_pershare = read_dta('dataset_at_pershare.dta')
 
@@ -129,12 +133,12 @@ for(m in seq(length(end_dates))){
   indf1 = ((end_date-10) <= dataset_pershare['fyear']) & (dataset_pershare['fyear'] < end_date)
 
   dataset_f1 = dataset_pershare[indf1,] 
-  dataset_f1 = cv(dataset_f1,0.9)
+  dataset_f1 = cv(dataset_f1,0.9) # what does the 0.9 mean?
 
   
   ####For F1  
   ######split data into training and validation dataset
-  training_all1 = dataset_f1[dataset_f1['MODELING_GROUP']==0,]
+  training_all1 = dataset_f1[dataset_f1['MODELING_GROUP']==0,]# What does this mean?
   validation_all1 =  dataset_f1[dataset_f1['MODELING_GROUP']==1,]
   
   ###### split both training and validation into candidate outcome variables(y) and candidate input variables
@@ -183,7 +187,7 @@ for(m in seq(length(end_dates))){
     }
     
   }
-  r1 = as.vector(r1)
+  r1 = as.vector(r1) # What are these vectors? # What is r1 and r2?
   r2 = as.vector(r2)
   
   MLonly1[m]= r2[which.max(r1)]
@@ -252,6 +256,7 @@ for(m in seq(length(end_dates))){
     
     
     yhatbig1= predict(clf,newdata = dataset_f1[,inputvar],type = 'response')+ dataset_f1$ana_forecast_f1eps
+    # Does the beat ratio contain the NAN's in the calculaation?
     r2[n1,n2]= sum(abs(yhatbig1-dataset_f1$F1eps_IBES)<abs(dataset_f1$ana_forecast_f1eps-dataset_f1$F1eps_IBES))/nrow(dataset_f1)
     
   }
