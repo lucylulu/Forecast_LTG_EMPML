@@ -18,9 +18,9 @@ library(haven)
 library(randomForest) 
 library(dplyr)
 ####path of data
-pathdta = '/Users/xiazou/Desktop/Tinbergen_Study/block5/Forecasting_LTG/Replication/OneDrive-2021-08-19'
+# pathdta = '/Users/xiazou/Desktop/Tinbergen_Study/block5/Forecasting_LTG/Replication/OneDrive-2021-08-19'
+dataset_at_pershare = read_dta('dataset_at_pershare.dta')
 setwd(pathdta)
-# dataset_at_pershare = read_dta('dataset_at_pershare.dta')
 
 ###Read dataset_pershare 
 dataset_pershare =  read_dta('dataset_pershare.dta')
