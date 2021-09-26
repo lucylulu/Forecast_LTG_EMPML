@@ -10,6 +10,10 @@
 import numpy as np
 import math
 import pandas as pd
+from torch import nn,optim
+from torch.utils.data import DataLoader
+import matplotlib.pyplot as plt
+import torch.nn.functional as F
 ###sq.m
 #%%
 def sq(a,b,step):
@@ -211,10 +215,120 @@ def proximal(groups,nc,XX,XY,tol,L,l2,func):
 ###Fw2
 
 def fw2(x):
-    x= r[:,:,0]
     maximum = max(map(max,x))
     p = np.where(x == maximum)
-    return(p)
+    return p
+
+
+####Define function for NN
+def loss_batch(model, loss_func, xb, yb):
+    loss = loss_func(model(xb.float()), yb)
+    return loss.item(), len(xb)
+
+####Define the NN1 class
+class NeuralNetwork1(nn.Module):
+    def __init__(self,N_fetures):
+        super(NeuralNetwork1, self).__init__()
+        self.flatten = nn.Flatten()
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(N_fetures,32),
+            nn.ReLU(),
+            nn.Linear(32,1)
+        )
+
+    def forward(self, x):
+        x = self.flatten(x)
+        logits = self.linear_relu_stack(x)
+        return logits
+
+####Define the NN2 class
+class NeuralNetwork2(nn.Module):
+    def __init__(self,N_fetures):
+        super(NeuralNetwork2, self).__init__()
+        self.flatten = nn.Flatten()
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(N_fetures,32),
+            nn.ReLU(),
+            nn.Linear(32,16),
+            nn.ReLU() ,
+            nn.Linear(16,1)
+        )
+
+    def forward(self, x):
+        x = self.flatten(x)
+        logits = self.linear_relu_stack(x)
+        return logits
+
+
+####Define the NN3 class
+class NeuralNetwork3(nn.Module):
+    def __init__(self,N_fetures):
+        super(NeuralNetwork3, self).__init__()
+        self.flatten = nn.Flatten()
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(N_fetures,32),
+            nn.ReLU(),
+            nn.Linear(32,16),
+            nn.ReLU(),
+            nn.Linear(16,8),
+            nn.ReLU(),
+            nn.Linear(8,1)
+        )
+
+    def forward(self, x):
+        x = self.flatten(x)
+        logits = self.linear_relu_stack(x)
+        return logits
+
+
+
+####Define the NN4 class
+class NeuralNetwork4(nn.Module):
+    def __init__(self,N_fetures):
+        super(NeuralNetwork4, self).__init__()
+        self.flatten = nn.Flatten()
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(N_fetures,32),
+            nn.ReLU(),
+            nn.Linear(32,16),
+            nn.ReLU(),
+            nn.Linear(16,8),
+            nn.ReLU(),
+            nn.Linear(8,4),
+            nn.ReLU(),
+            nn.Linear(4,1)
+        )
+
+    def forward(self, x):
+        x = self.flatten(x)
+        logits = self.linear_relu_stack(x)
+        return logits
+
+####Define the NN5 class
+class NeuralNetwork5(nn.Module):
+    def __init__(self,N_fetures):
+        super(NeuralNetwork5, self).__init__()
+        self.flatten = nn.Flatten()
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(N_fetures,32),
+            nn.ReLU(),
+            nn.Linear(32,16),
+            nn.ReLU(),
+            nn.Linear(16,8),
+            nn.ReLU(),
+            nn.Linear(8,4),
+            nn.ReLU(),
+            nn.Linear(4,2),
+            nn.ReLU(),
+            nn.Linear(2,1)
+        )
+
+    def forward(self, x):
+        x = self.flatten(x)
+        logits = self.linear_relu_stack(x)
+        return logits
+
+
 
 
 if __name__ =='__main__':
@@ -231,6 +345,14 @@ if __name__ =='__main__':
     proximal()
     pls()
     fw2()
+    loss_batch()
+    NeuralNetwork1()
+    NeuralNetwork2()
+    NeuralNetwork3()
+    NeuralNetwork4()
+    NeuralNetwork5()
+
+
 
 
 
